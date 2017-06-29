@@ -2,11 +2,17 @@
 
 A Sublime Text 3 package which converts raw urls to html/markdown links.
 
-HTML: 
+
+## Supported formats
+
+- HTML
+- Markdown
+
+### HTML
 
 ![Screenshot for html](https://raw.github.com/gh640/SublimeUrlConverter/master/assets/demo_html.gif)
 
-Markdown: 
+### Markdown
 
 ![Screenshot for markdown](https://raw.github.com/gh640/SublimeUrlConverter/master/assets/demo_markdown.gif)
 
