@@ -1,0 +1,10 @@
+[
+    {
+        "caption": "UrlConverter: Convert urls to html links",
+        "command": "url_converter_convert_to_html"
+    },
+    {
+        "caption": "UrlConverter: Convert urls to markdown links",
+        "command": "url_converter_convert_to_markdown"
+    }
+]
