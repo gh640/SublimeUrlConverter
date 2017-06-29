@@ -67,7 +67,7 @@ class BaseUrlConverter(sublime_plugin.TextCommand):
         return title_fetch_threads
 
     def extract_links(self, title_fetch_threads):
-        return ((s, self.REPL_TEMPLATE.format(f)) if f.title else (s, f.link)
+        return ((s, self.REPL_TEMPLATE.format(f)) if f.title else (s, f.url)
                 for s, f in title_fetch_threads)
 
     def replace_regions(self, edit, region_and_repls):
