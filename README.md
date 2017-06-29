@@ -1,6 +1,6 @@
 # SublimeUrlConverter
 
-A Sublime Text 3 Package which converts raw urls to html/markdown links. Edit
+A Sublime Text 3 Package which converts raw urls to html/markdown links.
 
 HTML: 
 
