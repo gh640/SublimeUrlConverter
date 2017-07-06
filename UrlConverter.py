@@ -85,10 +85,7 @@ class BaseUrlConverter:
         for region, url in region_and_urls:
             if url_titles_dict[url]:
                 repl = self.REPL_TEMPLATE.format(url=url, title=url_titles_dict[url])
-            else:
-                repl = False
-
-            region_and_repls.append((region, repl))
+                region_and_repls.append((region, repl))
 
         return region_and_repls
 
