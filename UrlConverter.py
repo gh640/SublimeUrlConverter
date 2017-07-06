@@ -80,8 +80,6 @@ class BaseUrlConverter:
         fetcher = TitleFetcher()
         return fetcher.fetch(urls)
 
-        return fetcher.results
-
     def combine_region_links(self, region_and_urls, url_titles_dict):
         region_and_repls = []
         for region, url in region_and_urls:
