@@ -108,3 +108,17 @@ class UrlConverterConvertToMarkdown(BaseUrlConverter, sublime_plugin.TextCommand
     """
 
     REPL_TEMPLATE = '[{title}]({url})'
+
+
+class UrlConverterConvertToCustom(BaseUrlConverter, sublime_plugin.TextCommand):
+    """Custom-format url converter command.
+    """
+
+    def run(self, edit, template=None):
+        if template:
+            self.REPL_TEMPLATE = template
+        else:
+            settings = sublime.load_settings('UrlConverter.sublime-settings')
+            self.REPL_TEMPLATE = settings.get('fallback_template', '{title}\n{url}')
+
+        super().run(edit)
