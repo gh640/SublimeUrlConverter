@@ -4,7 +4,6 @@
 """
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
-import time
 from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
