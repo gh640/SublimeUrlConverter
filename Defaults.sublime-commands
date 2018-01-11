@@ -8,6 +8,10 @@
         "command": "url_converter_convert_to_markdown"
     },
     {
+        "caption": "UrlConverter: Convert urls to RestructuredText links",
+        "command": "url_converter_convert_to_restructuredtext"
+    },
+    {
         "caption": "UrlConverter: Convert urls to custom-formatted links",
         "command": "url_converter_convert_to_custom"
     }
