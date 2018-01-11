@@ -7,6 +7,7 @@ A Sublime Text 3 package which converts raw urls to html/markdown links. Titles 
 
 - HTML
 - Markdown
+- RestructuredText
 - Custom format
 
 ### HTML
@@ -16,6 +17,10 @@ A Sublime Text 3 package which converts raw urls to html/markdown links. Titles 
 ### Markdown
 
 ![Screenshot for markdown](https://raw.github.com/gh640/SublimeUrlConverter/master/assets/demo_markdown.gif)
+
+### RestructuredText
+
+![Screenshot for ResructuredText](https://raw.github.com/gh640/SublimeUrlConverter/master/assets/demo_restructuredtext.gif)
 
 ### Custom
 
@@ -30,6 +35,7 @@ You can run bulk url conversion with the following commands.
 
 - `UrlConverter: Convert urls to html links`
 - `UrlConverter: Convert urls to markdown links`
+- `UrlConverter: Convert urls to RestructuredText links`
 - `UrlConverter: Convert urls to custom-formatted links`
 
 Select urls, open the command palette, and select one of the above commands.
