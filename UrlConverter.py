@@ -37,7 +37,7 @@ class TitleFetcher:
         try:
             response = requests.get(url)
             soup = BeautifulSoup(response.text, 'html.parser')
-            title = soup.head.title.text
+            title = soup.head.title.text.strip()
         except Exception as e:
             title = False
 
