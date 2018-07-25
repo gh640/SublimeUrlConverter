@@ -36,6 +36,7 @@ You can run bulk url conversion with the following commands.
 - `UrlConverter: Convert urls to html links`
 - `UrlConverter: Convert urls to markdown links`
 - `UrlConverter: Convert urls to RestructuredText links`
+- `UrlConverter: Convert urls to paths`
 - `UrlConverter: Convert urls to custom-formatted links`
 
 Select urls, open the command palette, and select one of the above commands.
