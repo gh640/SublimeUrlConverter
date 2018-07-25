@@ -109,7 +109,9 @@ class UrlConverterConvertToMarkdown(BaseUrlConverter, sublime_plugin.TextCommand
     REPL_TEMPLATE = '[{title}]({url})'
 
 
-class UrlConverterConvertToRestructuredtext(BaseUrlConverter, sublime_plugin.TextCommand):
+class UrlConverterConvertToRestructuredtext(
+    BaseUrlConverter, sublime_plugin.TextCommand
+):
     """RestructuredText url converter command.
     """
 
