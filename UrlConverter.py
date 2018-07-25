@@ -52,12 +52,15 @@ class BaseUrlConverter:
 
     def run(self, edit):
         region_and_urls = self.get_selected_urls()
-        urls = self.extract_unique_urls(region_and_urls)
-        url_titles_dict = self.fetch_titles(urls)
-        region_and_repls = self.combine_region_links(region_and_urls, url_titles_dict)
+        region_and_repls = self.prepare_region_and_repls(region_and_urls)
 
         self.replace_regions(edit, region_and_repls)
         sublime.status_message('UrlConverter: urls are converted successfully.')
+
+    def prepare_region_and_repls(self, region_and_urls):
+        urls = self.extract_unique_urls(region_and_urls)
+        url_titles_dict = self.fetch_titles(urls)
+        return self.combine_region_links(region_and_urls, url_titles_dict)
 
     def get_selected_urls(self):
         region_and_urls = []
@@ -116,6 +119,19 @@ class UrlConverterConvertToRestructuredtext(
     """
 
     REPL_TEMPLATE = '`{title} <{url}>`_'
+
+
+class UrlConverterConvertToPath(BaseUrlConverter, sublime_plugin.TextCommand):
+    """Path url converter command.
+    """
+
+    def prepare_region_and_repls(self, region_and_urls):
+        converter = self.extract_path_of_url
+        return ((region, converter(url)) for region, url in region_and_urls)
+
+    def extract_path_of_url(self, url):
+        parsed = urlparse(url)
+        return ''.join(parsed[2:])
 
 
 class UrlConverterConvertToCustom(BaseUrlConverter, sublime_plugin.TextCommand):
