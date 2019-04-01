@@ -13,7 +13,7 @@ import requests
 import sublime
 import sublime_plugin
 
-__version__ = '0.4.0'
+__version__ = '0.4.1'
 __author__ = "Goto Hayato"
 __copyright__ = 'Copyright 2018, Goto Hayato'
 __license__ = 'MIT'
