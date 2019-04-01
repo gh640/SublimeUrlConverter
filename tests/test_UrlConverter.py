@@ -5,7 +5,6 @@ import sys
 import unittest
 from unittest import mock
 
-import requests
 import sublime
 
 UrlConverter = sys.modules['UrlConverter.UrlConverter']
@@ -24,7 +23,7 @@ class TestViewMixin:
 
 
 class TestTitleFetcher(TestViewMixin, unittest.TestCase):
-    @mock.patch.object(requests, 'get')
+    @mock.patch('requests.get')
     def test_fetch(self, get):
         title_set = 'Sample title'
         urls = ['https://example1.com', 'https://example2.com']
@@ -39,7 +38,7 @@ class TestTitleFetcher(TestViewMixin, unittest.TestCase):
             self.assertIn(url, results)
             self.assertEqual(results[url], title_set)
 
-    @mock.patch.object(requests, 'get')
+    @mock.patch('requests.get')
     def test_fetch_title(self, get):
         title_set = 'Sample title'
         url_orig = 'https://example.com'
@@ -52,7 +51,7 @@ class TestTitleFetcher(TestViewMixin, unittest.TestCase):
         self.assertEqual(url_orig, url)
         self.assertEqual(title_set, title)
 
-    @mock.patch.object(requests, 'get')
+    @mock.patch('requests.get')
     def test_fetch_title__with_surrounding_spaces(self, get):
         title_set = '\n Sample title  \n\n'
         url_orig = 'https://example.com'
@@ -65,7 +64,7 @@ class TestTitleFetcher(TestViewMixin, unittest.TestCase):
         self.assertEqual(url_orig, url)
         self.assertEqual(title_set.strip(), title)
 
-    @mock.patch.object(requests, 'get')
+    @mock.patch('requests.get')
     def test_fetch_title__error(self, get):
         url_orig = 'https://example.com'
         get.side_effect = Exception('A random exception occurred.')
@@ -73,3 +72,20 @@ class TestTitleFetcher(TestViewMixin, unittest.TestCase):
         url, title = UrlConverter.TitleFetcher.fetch_title(url_orig)
         self.assertEqual(url_orig, url)
         self.assertFalse(title)
+
+
+class UrlConverterConvertToHtmlTestCase(TestViewMixin, unittest.TestCase):
+    @mock.patch('sublime.Region')
+    def test_combine_region_links(self, Region):
+        converter = UrlConverter.UrlConverterConvertToHtml(self.view)
+        region_and_links = [
+            (Region(), 'https://example.com?page=5'),
+            (Region(), 'https://example.com?page=5&キー=値'),
+        ]
+        url_titles_dict = {
+            'https://example.com?page=5': 'title a',
+            'https://example.com?page=5&キー=値': 'title b',
+        }
+        result = converter.combine_region_links(region_and_links, url_titles_dict)
+        expected = '<a href="https://example.com?page=5&amp;キー=値">title b</a>'
+        self.assertEqual(result[1][1], expected)

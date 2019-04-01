@@ -3,6 +3,7 @@
 """Converts selected URLs to links with fetched page titles.
 """
 
+import html
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.parse import urlparse
 
@@ -103,6 +104,19 @@ class UrlConverterConvertToHtml(BaseUrlConverter, sublime_plugin.TextCommand):
     """
 
     REPL_TEMPLATE = '<a href="{url}">{title}</a>'
+
+    def combine_region_links(self, region_and_urls, url_titles_dict):
+        """Override to escape the url in html `href`.
+        """
+        region_and_repls = []
+        for region, url in region_and_urls:
+            if url_titles_dict[url]:
+                repl = self.REPL_TEMPLATE.format(
+                    url=html.escape(url), title=url_titles_dict[url]
+                )
+                region_and_repls.append((region, repl))
+
+        return region_and_repls
 
 
 class UrlConverterConvertToMarkdown(BaseUrlConverter, sublime_plugin.TextCommand):
