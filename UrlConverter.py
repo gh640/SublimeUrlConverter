@@ -4,11 +4,12 @@
 """
 
 import html
+import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.parse import urlparse
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 import sublime
 import sublime_plugin
@@ -17,6 +18,8 @@ __version__ = '0.4.1'
 __author__ = "Goto Hayato"
 __copyright__ = 'Copyright 2018, Goto Hayato'
 __license__ = 'MIT'
+
+logger = logging.getLogger('UrlConverter')
 
 
 class TitleFetcher:
@@ -41,6 +44,7 @@ class TitleFetcher:
             title = soup.head.title.text.strip()
         except Exception as e:
             title = False
+            logger.error('Failed to fetch an HTML title of a URL: {}.'.format(str(e)))
 
         return (url, title)
 
