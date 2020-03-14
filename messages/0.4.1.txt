@@ -1,0 +1,1 @@
+- Added html encoding to urls in html converter (`url_converter_convert_to_html`).
