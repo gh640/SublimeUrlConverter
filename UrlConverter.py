@@ -14,9 +14,9 @@ from bs4 import BeautifulSoup
 import sublime
 import sublime_plugin
 
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 __author__ = "Goto Hayato"
-__copyright__ = 'Copyright 2018, Goto Hayato'
+__copyright__ = 'Copyright 2020, Goto Hayato'
 __license__ = 'MIT'
 
 logger = logging.getLogger('UrlConverter')

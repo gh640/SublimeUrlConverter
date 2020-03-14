@@ -1,3 +1,7 @@
+## 0.4.2
+
+- Added logging when the process to fetch a page title has failed ( [#7][i7] ).
+
 ## 0.4.1
 
 - Fixed the issue that URLs are not properly HTML-encoded when converted to HTML links with the command "Convert urls to html links" ( [#6][i6] ).
@@ -14,6 +18,7 @@
 
 - Added a RestructuredText format ( [#1][i1] ).
 
+[i7]: https://github.com/gh640/SublimeUrlConverter/issues/7
 [i6]: https://github.com/gh640/SublimeUrlConverter/issues/6
 [i5]: https://github.com/gh640/SublimeUrlConverter/issues/5
 [i3]: https://github.com/gh640/SublimeUrlConverter/issues/3
