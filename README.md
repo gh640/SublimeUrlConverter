@@ -1,6 +1,6 @@
 # SublimeUrlConverter
 
-A Sublime Text 3 package which converts raw urls to html/markdown links. Titles of links are fetched through target web pages.
+A Sublime Text 3 / 4 package which converts raw urls to html/markdown links. Titles of links are fetched through target web pages.
 
 
 ## Supported formats
