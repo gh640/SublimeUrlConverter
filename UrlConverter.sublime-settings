@@ -1,3 +1,4 @@
 {
-  "fallback_template": "{title}\n{url}"
+  "fallback_template": "{title}\n{url}",
+  "timeout": 10
 }

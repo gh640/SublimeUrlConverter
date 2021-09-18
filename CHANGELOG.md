@@ -1,3 +1,7 @@
+## 0.5.0
+
+- Added setting item `timeout` for setting timeout value for fetching processes ( [#8][i8] ).
+
 ## 0.4.2
 
 - Added logging when the process to fetch a page title has failed ( [#7][i7] ).
@@ -18,6 +22,7 @@
 
 - Added a RestructuredText format ( [#1][i1] ).
 
+[i8]: https://github.com/gh640/SublimeUrlConverter/issues/8
 [i7]: https://github.com/gh640/SublimeUrlConverter/issues/7
 [i6]: https://github.com/gh640/SublimeUrlConverter/issues/6
 [i5]: https://github.com/gh640/SublimeUrlConverter/issues/5
