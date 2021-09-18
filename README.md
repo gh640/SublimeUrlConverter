@@ -43,16 +43,24 @@ Select urls, open the command palette, and select one of the above commands.
 
 ### Settings
 
-You can use a custom link format for the command. The default format is as shown below.
-
 ```json
 {
-  "fallback_template": "{title}\n{url}"
+  "fallback_template": "{title}\n{url}",
+  "timeout": 10
 }
 ```
 
+#### `fallback_template`
+
+You can use a custom link format for the command. The default format is as shown below.
+
 There are 2 tokens which can be used in the template: `{title}` and `{url}`.
 
+#### `timeout`
+
+Seconds the fetching process times out with.
+
+Default: `10`
 
 ## License
 

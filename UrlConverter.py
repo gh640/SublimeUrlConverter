@@ -5,7 +5,7 @@
 
 import html
 import logging
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import TimeoutError, ThreadPoolExecutor, as_completed
 from urllib.parse import urlparse
 
 import requests
@@ -21,18 +21,30 @@ __license__ = 'MIT'
 
 logger = logging.getLogger('UrlConverter')
 
+SETTINGS_NAME = 'UrlConverter.sublime-settings'
+
 
 class TitleFetcher:
-    """Webpage title fetcher with multithreading.
-    """
+    """Webpage title fetcher with multithreading."""
 
     def fetch(self, urls):
+        settings = sublime.load_settings(SETTINGS_NAME)
+        timeout = settings.get('timeout', 10)
+
+        if type(timeout) not in (int, float):
+            logger.error('`timeout` must be an int or float.')
+            return {}
+
         results = []
         with ThreadPoolExecutor(max_workers=10) as executor:
             futures = (executor.submit(self.fetch_title, url) for url in urls)
-
-            for f in as_completed(futures):
-                results.append(f.result())
+            try:
+                results.extend(
+                    f.result() for f in as_completed(futures, timeout=timeout)
+                )
+            except TimeoutError as e:
+                logger.error('Page title fetching timed out.')
+                return {}
 
         return dict(results)
 
@@ -50,8 +62,7 @@ class TitleFetcher:
 
 
 class BaseUrlConverter:
-    """Common abstract url converter.
-    """
+    """Common abstract url converter."""
 
     REPL_TEMPLATE = ''
 
@@ -90,7 +101,7 @@ class BaseUrlConverter:
     def combine_region_links(self, region_and_urls, url_titles_dict):
         region_and_repls = []
         for region, url in region_and_urls:
-            if url_titles_dict[url]:
+            if url_titles_dict.get(url):
                 repl = self.REPL_TEMPLATE.format(url=url, title=url_titles_dict[url])
                 region_and_repls.append((region, repl))
 
@@ -104,17 +115,15 @@ class BaseUrlConverter:
 
 
 class UrlConverterConvertToHtml(BaseUrlConverter, sublime_plugin.TextCommand):
-    """Html url converter command.
-    """
+    """Html url converter command."""
 
     REPL_TEMPLATE = '<a href="{url}">{title}</a>'
 
     def combine_region_links(self, region_and_urls, url_titles_dict):
-        """Override to escape the url in html `href`.
-        """
+        """Override to escape the url in html `href`."""
         region_and_repls = []
         for region, url in region_and_urls:
-            if url_titles_dict[url]:
+            if url_titles_dict.get(url):
                 repl = self.REPL_TEMPLATE.format(
                     url=html.escape(url), title=url_titles_dict[url]
                 )
@@ -124,8 +133,7 @@ class UrlConverterConvertToHtml(BaseUrlConverter, sublime_plugin.TextCommand):
 
 
 class UrlConverterConvertToMarkdown(BaseUrlConverter, sublime_plugin.TextCommand):
-    """Markdown url converter command.
-    """
+    """Markdown url converter command."""
 
     REPL_TEMPLATE = '[{title}]({url})'
 
@@ -133,15 +141,13 @@ class UrlConverterConvertToMarkdown(BaseUrlConverter, sublime_plugin.TextCommand
 class UrlConverterConvertToRestructuredtext(
     BaseUrlConverter, sublime_plugin.TextCommand
 ):
-    """RestructuredText url converter command.
-    """
+    """RestructuredText url converter command."""
 
     REPL_TEMPLATE = '`{title} <{url}>`_'
 
 
 class UrlConverterConvertToPath(BaseUrlConverter, sublime_plugin.TextCommand):
-    """Path url converter command.
-    """
+    """Path url converter command."""
 
     def prepare_region_and_repls(self, region_and_urls):
         converter = self.extract_path_of_url
@@ -153,14 +159,13 @@ class UrlConverterConvertToPath(BaseUrlConverter, sublime_plugin.TextCommand):
 
 
 class UrlConverterConvertToCustom(BaseUrlConverter, sublime_plugin.TextCommand):
-    """Custom-format url converter command.
-    """
+    """Custom-format url converter command."""
 
     def run(self, edit, template=None):
         if template:
             self.REPL_TEMPLATE = template
         else:
-            settings = sublime.load_settings('UrlConverter.sublime-settings')
+            settings = sublime.load_settings(SETTINGS_NAME)
             self.REPL_TEMPLATE = settings.get('fallback_template', '{title}\n{url}')
 
         super().run(edit)
