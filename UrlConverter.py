@@ -6,7 +6,9 @@
 import html
 import logging
 from concurrent.futures import TimeoutError, ThreadPoolExecutor, as_completed
+from math import floor
 from urllib.parse import urlparse
+from urllib.request import urlopen
 
 import requests
 from bs4 import BeautifulSoup
@@ -19,13 +21,20 @@ __author__ = "Goto Hayato"
 __copyright__ = 'Copyright 2021, Goto Hayato'
 __license__ = 'MIT'
 
-logger = logging.getLogger('UrlConverter')
-
+try:
+    SUBLIME_MAJOR_VERSION = floor(int(sublime.version()) / 1000)
+except Exception:
+    SUBLIME_MAJOR_VERSION = 3
 SETTINGS_NAME = 'UrlConverter.sublime-settings'
+
+logger = logging.getLogger('UrlConverter')
 
 
 class TitleFetcher:
     """Webpage title fetcher with multithreading."""
+
+    def __init__(self, sublime_major_version):
+        self._sublime_major_version = sublime_major_version
 
     def fetch(self, urls):
         settings = sublime.load_settings(SETTINGS_NAME)
@@ -48,17 +57,36 @@ class TitleFetcher:
 
         return dict(results)
 
-    @staticmethod
-    def fetch_title(url):
+    def fetch_title(self, url):
         try:
-            response = requests.get(url)
-            soup = BeautifulSoup(response.text, 'html.parser')
+            html = self._fetch_html(url)
+            soup = BeautifulSoup(html, 'html.parser')
             title = soup.head.title.text.strip()
         except Exception as e:
             title = False
             logger.error('Failed to fetch an HTML title of a URL: {}.'.format(str(e)))
 
         return (url, title)
+
+    def _fetch_html(self, url):
+        if self._sublime_major_version == 4:
+            return self._fetch_html_v4(url)
+        elif self._sublime_major_version == 3:
+            return self._fetch_html_v3(url)
+        else:
+            raise ValueError(
+                'Unsupported Sublime Text version: {}'.format(
+                    self._sublime_major_version
+                )
+            )
+
+    def _fetch_html_v4(cls, url):
+        response = urlopen(url)
+        return response.read().decode()
+
+    def _fetch_html_v3(cls, url):
+        response = requests.get(url)
+        return response.text
 
 
 class BaseUrlConverter:
@@ -95,7 +123,7 @@ class BaseUrlConverter:
         return set(url for region, url in region_and_urls)
 
     def fetch_titles(self, urls):
-        fetcher = TitleFetcher()
+        fetcher = TitleFetcher(SUBLIME_MAJOR_VERSION)
         return fetcher.fetch(urls)
 
     def combine_region_links(self, region_and_urls, url_titles_dict):
