@@ -16,9 +16,9 @@ from bs4 import BeautifulSoup
 import sublime
 import sublime_plugin
 
-__version__ = '0.5.0'
+__version__ = '0.6.0'
 __author__ = "Goto Hayato"
-__copyright__ = 'Copyright 2021, Goto Hayato'
+__copyright__ = 'Copyright 2022, Goto Hayato'
 __license__ = 'MIT'
 
 try:
